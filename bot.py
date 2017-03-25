@@ -5,6 +5,7 @@ import requests
 import tweepy
 from PIL import Image
 from PIL import ImageFile
+import re
 
 from secrets import *
 
@@ -15,15 +16,15 @@ auth.set_access_token(A_TOKEN, A_TOKEN_SECRET)
 
 api = tweepy.API(auth)	
 
-def tweet_image(url, status):
-    # print(url)
+def tweet_image(url, text):
     filename = 'temp.jpg'
     request = requests.get(url, stream=True)
     if request.status_code == 200:
         i = Image.open(BytesIO(request.content))
         i.save(filename)
         scramble(filename)
-        api.update_with_media('scramble.jpg', status=status)
+        text = re.sub(r'[@]', '[PAPAKI]', text)
+        api.update_with_media('scramble.jpg', status=text)
     else:
         print("unable to download image")
 
@@ -61,11 +62,9 @@ def retweet():
         idToRetweet = searchResults[randomInt].id_str
         if 'media' in searchResults[randomInt].entities:
             for image in searchResults[randomInt].entities['media']:
-                print ('Image scrabbling')
                 tweet_image(image['media_url'], searchResults[randomInt].text)
         else:
                 api.retweet(idToRetweet)
-
 class oleztBot():
 	retweet()
 	
