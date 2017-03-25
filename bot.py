@@ -26,7 +26,7 @@ def tweet_image(url, text):
         text = re.sub(r'[@]', '[PAPAKI]', text)
         api.update_with_media('scramble.jpg', status=text)
     else:
-        print("unable to download image")
+        findNewTrendingTweet()
 
 
 def scramble(filename):
@@ -49,23 +49,21 @@ def scramble(filename):
         result.paste(c, box)
     result.save('scramble.jpg')
 
-def retweet():
+def findNewTrendingTweet():
         if random.randint(1, 4)==1:
                 trends = api.trends_place(1) #globalTrends
         else:
                 trends = api.trends_place(23424833) #greeceTrends
         randomInt = random.randint(1, 10)
         hashtag = trends[0]['trends'][randomInt]['query']
-        print (trends[0]['trends'][randomInt]['name'])
         searchResults = api.search(q=hashtag, rpp=1, result_type='mixed')
         randomInt = random.randint(1, 3)
-        idToRetweet = searchResults[randomInt].id_str
         if 'media' in searchResults[randomInt].entities:
             for image in searchResults[randomInt].entities['media']:
                 tweet_image(image['media_url'], searchResults[randomInt].text)
         else:
-                api.retweet(idToRetweet)
+                api.retweet(searchResults[randomInt].id_str)
 class oleztBot():
-	retweet()
+	findNewTrendingTweet()
 	
 oleztBot()
