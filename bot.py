@@ -5,6 +5,9 @@ import requests
 import tweepy
 from PIL import Image
 from PIL import ImageFile
+from PIL import ImageFont
+from PIL import ImageDraw
+
 import re
 
 from secrets import *
@@ -47,6 +50,9 @@ def scramble(filename):
     for box, sbox in zip(blockmap, shuffle):
         c = img.crop(sbox)
         result.paste(c, box)
+    draw = ImageDraw.Draw(result)
+    font = ImageFont.truetype("arial.ttf", 60)
+    draw.text((20, 20),"OleztBot :)",(255,255,255),font=font)
     result.save('scramble.jpg')
 
 def findNewTrendingTweet():
@@ -62,7 +68,7 @@ def findNewTrendingTweet():
             for image in searchResults[randomInt].entities['media']:
                 tweet_image(image['media_url'], searchResults[randomInt].text)
         else:
-                api.retweet(searchResults[randomInt].id_str)
+            api.retweet(searchResults[randomInt].id_str)
 class oleztBot():
 	findNewTrendingTweet()
 	
