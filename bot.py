@@ -3,6 +3,7 @@ from io import BytesIO
 
 import requests
 import tweepy
+
 from PIL import Image
 from PIL import ImageFile
 from PIL import ImageFont
@@ -55,6 +56,14 @@ def scramble(filename):
     draw.text((20, 20),"OleztBot :)",(255,255,255),font=font)
     result.save('scramble.jpg')
 
+def checkForImage(searchResults, randomInt):
+    if 'media' in searchResults[randomInt].entities:
+        for image in searchResults[randomInt].entities['media']:
+            tweet_image(image['media_url'], searchResults[randomInt].text)
+    else:
+        checkForImage(searchResults, randomInt+1)
+        #api.retweet(searchResults[randomInt].id_str)
+
 def findNewTrendingTweet():
         if random.randint(1, 4)==1:
                 trends = api.trends_place(1) #globalTrends
@@ -64,11 +73,8 @@ def findNewTrendingTweet():
         hashtag = trends[0]['trends'][randomInt]['query']
         searchResults = api.search(q=hashtag, rpp=1, result_type='mixed')
         randomInt = random.randint(1, 3)
-        if 'media' in searchResults[randomInt].entities:
-            for image in searchResults[randomInt].entities['media']:
-                tweet_image(image['media_url'], searchResults[randomInt].text)
-        else:
-            api.retweet(searchResults[randomInt].id_str)
+        checkForImage(searchResults, randomInt)
+        
 class oleztBot():
 	findNewTrendingTweet()
 	
