@@ -102,7 +102,7 @@ def checkForImage(searchResults, i):
     elif (i<len(searchResults)) and (i<20):
         checkForImage(searchResults, i+1)
     else:
-        api.retweet(searchResults[i].id_str)
+        api.retweet(searchResults[i-1].id_str)
 
 def findNewTrendingTweet():
     if random.randint(1, 3)==1:
