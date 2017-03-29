@@ -1,14 +1,11 @@
-# twitter-oleztBot
+# oleztThugBot
 
-Hopefully this is not going to be an assBot...<br>
-Born Saturday, March 25, 2016.<br>
-Enjoy its tweets: https://twitter.com/oleztBot
+Born Saturday, March 29, 2016.<br>
+Enjoy its tweets: https://twitter.com/oleztThugBot
 ```
 Find a trending tweet()
-If image exist:
-  Scramble pixels and tweet()
+If face exist:
+  Add thugGlasses()
 else
-  Retweet()
+  Scramble()
 ```
-
-Inspiration: https://scotch.io/tutorials/build-a-tweet-bot-with-python
