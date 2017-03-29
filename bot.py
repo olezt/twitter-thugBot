@@ -34,11 +34,10 @@ def tweet_image(url, text, hashtag):
         i = Image.open(BytesIO(request.content))
         i.save(filename)
         result = detectFace(filename)
-        hashtag = re.sub('(%23)', '#', hashtag)
-        text = "Nailed it! "+ hashtag
+        text = "Nailed it! #oleztThugBot SearchQuery: "+ hashtag
         if result==0:
             scramble(filename)
-            text = "Couldn't find any face! Shiaat " + hashtag
+            text = "Couldn't find any face! Shiaat #oleztThugBot SearchQuery: " + hashtag
         api.update_with_media('editedImage.png', status=text)
     else:
         findNewTrendingTweet()
@@ -111,8 +110,9 @@ def findNewTrendingTweet():
     else:
         trends = api.trends_place(23424833) #greeceTrends
     randomInt = random.randint(1, 7)
-    hashtag = trends[0]['trends'][randomInt]['query']
-    searchResults = api.search(q=hashtag, count=20, result_type='mixed', include_entities=True)
+    query = trends[0]['trends'][randomInt]['query']
+    hashtag = trends[0]['trends'][randomInt]['name']
+    searchResults = api.search(q=query, count=20, result_type='mixed', include_entities=True)
     checkForImage(searchResults, 0, hashtag)
         
 class thugBot():
