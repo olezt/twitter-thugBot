@@ -27,17 +27,18 @@ face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 face_cascade_alt = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
 face_cascade_profile = cv2.CascadeClassifier('haarcascade_profileface.xml')
 
-def tweet_image(url, text):
+def tweet_image(url, text, hashtag):
     filename = 'temp.jpg'
     request = requests.get(url, stream=True)
     if request.status_code == 200:
         i = Image.open(BytesIO(request.content))
         i.save(filename)
         result = detectFace(filename)
-        text = "Nailed it!"
+        hashtag = re.sub('(%23)', '#', hashtag)
+        text = "Nailed it! "+ hashtag
         if result==0:
             scramble(filename)
-            text = "Couldn't find any face! Shiaat"
+            text = "Couldn't find any face! Shiaat " + hashtag
         api.update_with_media('editedImage.png', status=text)
     else:
         findNewTrendingTweet()
@@ -95,12 +96,12 @@ def scramble(filename):
     cv2.imwrite('editedImage.png',img)
     
 
-def checkForImage(searchResults, i):
+def checkForImage(searchResults, i, hashtag):
     if 'media' in searchResults[i].entities:
         for image in searchResults[i].entities['media']:
-            tweet_image(image['media_url'], searchResults[i].text)
+            tweet_image(image['media_url'], searchResults[i].text, hashtag)
     elif (i<len(searchResults)) and (i<20):
-        checkForImage(searchResults, i+1)
+        checkForImage(searchResults, i+1, hashtag)
     else:
         api.retweet(searchResults[i-1].id_str)
 
@@ -112,7 +113,7 @@ def findNewTrendingTweet():
     randomInt = random.randint(1, 7)
     hashtag = trends[0]['trends'][randomInt]['query']
     searchResults = api.search(q=hashtag, count=20, result_type='mixed', include_entities=True)
-    checkForImage(searchResults, 0)
+    checkForImage(searchResults, 0, hashtag)
         
 class thugBot():
 	findNewTrendingTweet()
