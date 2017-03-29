@@ -38,7 +38,7 @@ def tweet_image(url, text):
         if result==0:
             scramble(filename)
             text = "Couldn't find any face! Shiaat"
-        #api.update_with_media('editedImage.png', status=text)
+        api.update_with_media('editedImage.png', status=text)
     else:
         findNewTrendingTweet()
 
