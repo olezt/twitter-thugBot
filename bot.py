@@ -37,6 +37,7 @@ def tweet_image(url, text, hashtag):
         text = "Nailed it! #oleztThugBot SearchQuery: "+ hashtag
         if result==0:
             scramble(filename)
+            addMeme('editedImage.png', 'seriously.png')
             text = "Couldn't find any face! Shiaat #oleztThugBot SearchQuery: " + hashtag
         api.update_with_media('editedImage.png', status=text)
     else:
@@ -85,15 +86,17 @@ def scramble(filename):
         c = img.crop(sbox)
         result.paste(c, box)
     result.save('editedImage.png')
-    img = cv2.imread('editedImage.png')
+    
+def addMeme(filename, meme):
+    img = cv2.imread(filename)
+    height, width, channels = img.shape
     seriously = cv2.imread('seriously.png', cv2.IMREAD_UNCHANGED)
     seriously = cv2.resize(seriously, (int(width/2), int(height/2)))
     x_offset=int(width/2-25)
     y_offset=int(height/2)
     for c in range(0,3):
         img[y_offset:y_offset+seriously.shape[0], x_offset:x_offset+seriously.shape[1], c] = seriously[:,:,c] * (seriously[:,:,3]/255.0) + img[y_offset:y_offset+seriously.shape[0], x_offset:x_offset+seriously.shape[1], c] * (1.0 - seriously[:,:,3]/255.0)
-    cv2.imwrite('editedImage.png',img)
-    
+    cv2.imwrite(filename,img)
 
 def checkForImage(searchResults, i, hashtag):
     if 'media' in searchResults[i].entities:
