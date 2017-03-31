@@ -108,11 +108,12 @@ def addMeme(filename, meme):
     cv2.imwrite(filename,img)
 
 def checkForImage(searchResults, i, hashtag):
-    if 'media' in searchResults[i].entities:
-        for image in searchResults[i].entities['media']:
-            tweet_image(image['media_url'], searchResults[i].text, hashtag)
-    elif (i<len(searchResults)) and (i<20):
-        checkForImage(searchResults, i+1, hashtag)
+    if i<len(searchResults):
+        if 'media' in searchResults[i].entities:
+            for image in searchResults[i].entities['media']:
+                tweet_image(image['media_url'], searchResults[i].text, hashtag)
+        else:
+            checkForImage(searchResults, i+1, hashtag)
     else:
         api.retweet(searchResults[i-1].id_str)
 
