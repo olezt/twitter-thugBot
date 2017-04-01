@@ -37,7 +37,7 @@ def tweet_image(url, text, hashtag):
         text = "Nailed it! #oleztThugBot SearchQuery: "+ hashtag
         if result==0:
             scramble(filename)
-            addMeme('images/editedImage.png', 'images/seriously.png')
+            addMeme('images/editedImage.png', 'images/'+str(random.randint(0, 5))+'.png')
             text = "Couldn't find any face! Shiaat #oleztThugBot SearchQuery: " + hashtag
         api.update_with_media('images/editedImage.png', status=text)
     else:
