@@ -23,12 +23,12 @@ auth.set_access_token(A_TOKEN, A_TOKEN_SECRET)
 
 api = tweepy.API(auth)	
 
-face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-face_cascade_alt = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
-face_cascade_profile = cv2.CascadeClassifier('haarcascade_profileface.xml')
+face_cascade = cv2.CascadeClassifier('haarcascades/haarcascade_frontalface_default.xml')
+face_cascade_alt = cv2.CascadeClassifier('haarcascades/haarcascade_frontalface_alt.xml')
+face_cascade_profile = cv2.CascadeClassifier('haarcascades/haarcascade_profileface.xml')
 
 def tweet_image(url, text, hashtag):
-    filename = 'temp.jpg'
+    filename = 'images/temp.jpg'
     request = requests.get(url, stream=True)
     if request.status_code == 200:
         i = Image.open(BytesIO(request.content))
@@ -37,15 +37,15 @@ def tweet_image(url, text, hashtag):
         text = "Nailed it! #oleztThugBot SearchQuery: "+ hashtag
         if result==0:
             scramble(filename)
-            addMeme('editedImage.png', 'seriously.png')
+            addMeme('images/editedImage.png', 'images/seriously.png')
             text = "Couldn't find any face! Shiaat #oleztThugBot SearchQuery: " + hashtag
-        api.update_with_media('editedImage.png', status=text)
+        api.update_with_media('images/editedImage.png', status=text)
     else:
         findNewTrendingTweet()
 
 def detectFace(filename):
     img = cv2.imread(filename, cv2.IMREAD_UNCHANGED)
-    glasses = cv2.imread('thugLifeGlasses.png', cv2.IMREAD_UNCHANGED)
+    glasses = cv2.imread('images/thugLifeGlasses.png', cv2.IMREAD_UNCHANGED)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, 1.3, 5)
     if len(faces)<=0:
@@ -61,10 +61,10 @@ def detectFace(filename):
             y_offset=int(y+(h/3.5))
             for c in range(0,3):
                 img[y_offset:y_offset+glasses.shape[0], x_offset:x_offset+glasses.shape[1], c] = glasses[:,:,c] * (glasses[:,:,3]/255.0) +  img[y_offset:y_offset+glasses.shape[0], x_offset:x_offset+glasses.shape[1], c] * (1.0 - glasses[:,:,3]/255.0)
-        cv2.imwrite('editedImage.png',img)
+        cv2.imwrite('images/editedImage.png',img)
         return 1
     else:
-        cv2.imwrite('editedImage.png',img)
+        cv2.imwrite('images/editedImage.png',img)
         return 0
 
 def scramble(filename):
@@ -85,9 +85,9 @@ def scramble(filename):
     for box, sbox in zip(blockmap, shuffle):
         c = img.crop(sbox)
         result.paste(c, box)
-    result.save('editedImage.png')
+    result.save('images/editedImage.png')
     #Crop black edges
-    img = cv2.imread('editedImage.png')
+    img = cv2.imread('images/editedImage.png')
     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     _,thresh = cv2.threshold(gray,1,255,cv2.THRESH_BINARY)
     im2, contours,hierarchy = cv2.findContours(thresh,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
@@ -99,7 +99,7 @@ def scramble(filename):
 def addMeme(filename, meme):
     img = cv2.imread(filename)
     height, width, channels = img.shape
-    seriously = cv2.imread('seriously.png', cv2.IMREAD_UNCHANGED)
+    seriously = cv2.imread('images/seriously.png', cv2.IMREAD_UNCHANGED)
     seriously = cv2.resize(seriously, (int(width/2), int(height/2)))
     x_offset=int(width/2-25)
     y_offset=int(height/2)
