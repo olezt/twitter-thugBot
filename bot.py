@@ -94,7 +94,7 @@ def scramble(filename):
     cnt = contours[0]
     x,y,w,h = cv2.boundingRect(cnt)
     img = img[y:y+h,x:x+w]
-    cv2.imwrite('editedImage.png',img)
+    cv2.imwrite('images/editedImage.png',img)
     
 def addMeme(filename, meme):
     img = cv2.imread(filename)
