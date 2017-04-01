@@ -9,3 +9,10 @@ If face exist:
 else
   Scramble()
 ```
+
+### Printscreens
+
+<p align="center">
+  <img src="imgPreviews/preview1.jpg" height="400"/>
+  <img src="imgPreviews/preview2.jpg" height="400"/>
+</p>
