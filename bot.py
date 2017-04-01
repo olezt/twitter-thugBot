@@ -132,7 +132,6 @@ def pickHashtag(trends):
     noGlassesForYou = re.compile('xa|x.a.|xrisi|avgi|xrysi|xrisi|χα|χρυση|χρυσή|αυγη|αυγή|αβγη|χροισι|χ.α.', re.IGNORECASE) 
     randomInt = random.randint(1, len (trends[0]['trends'])-1)
     name = trends[0]['trends'][randomInt]['name']
-    print (name)
     if noGlassesForYou.search(name):
         print ('X.A. related hashtag was not tweeted.')
         pickHashtag(trends)
