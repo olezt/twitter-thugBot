@@ -122,12 +122,23 @@ def findNewTrendingTweet():
         trends = api.trends_place(1) #globalTrends
     else:
         trends = api.trends_place(23424833) #greeceTrends
-    randomInt = random.randint(1, len (trends[0]['trends'])-1)
-    query = trends[0]['trends'][randomInt]['query']
-    hashtag = trends[0]['trends'][randomInt]['name']
+    hashtagNumber = pickHashtag(trends)
+    query = trends[0]['trends'][hashtagNumber]['query']
+    hashtag = trends[0]['trends'][hashtagNumber]['name']
     searchResults = api.search(q=query, count=20, result_type='mixed', include_entities=True)
     checkForImage(searchResults, 0, hashtag)
         
+def pickHashtag(trends):
+    noGlassesForYou = re.compile('xa|x.a.|xrisi|avgi|xrysi|xrisi|χα|χρυση|χρυσή|αυγη|αυγή|αβγη|χροισι|χ.α.', re.IGNORECASE) 
+    randomInt = random.randint(1, len (trends[0]['trends'])-1)
+    name = trends[0]['trends'][randomInt]['name']
+    print (name)
+    if noGlassesForYou.search(name):
+        print ('X.A. related hashtag was not tweeted.')
+        pickHashtag(trends)
+    else:
+        return randomInt;
+
 class thugBot():
 	findNewTrendingTweet()
 	
