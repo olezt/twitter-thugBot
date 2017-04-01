@@ -34,11 +34,12 @@ def tweet_image(url, text, hashtag):
         i = Image.open(BytesIO(request.content))
         i.save(filename)
         result = detectFace(filename)
-        text = "Nailed it! #oleztThugBot SearchQuery: "+ hashtag
-        if result==0:
+        if result==1:
+            text = random.choice(list(open('yesQuotes.txt'))).rstrip() + " #oleztThugBot SearchQuery: "+ hashtag
+        else:
             scramble(filename)
             addMeme('images/editedImage.png', 'images/'+str(random.randint(0, 5))+'.png')
-            text = "Couldn't find any face! Shiaat #oleztThugBot SearchQuery: " + hashtag
+            text = random.choice(list(open('noQuotes.txt'))).rstrip() + " #oleztThugBot SearchQuery: " + hashtag
         api.update_with_media('images/editedImage.png', status=text)
     else:
         findNewTrendingTweet()
