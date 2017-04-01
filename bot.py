@@ -99,12 +99,12 @@ def scramble(filename):
 def addMeme(filename, meme):
     img = cv2.imread(filename)
     height, width, channels = img.shape
-    seriously = cv2.imread('images/seriously.png', cv2.IMREAD_UNCHANGED)
-    seriously = cv2.resize(seriously, (int(width/2), int(height/2)))
+    memeImg = cv2.imread(meme, cv2.IMREAD_UNCHANGED)
+    memeImg = cv2.resize(memeImg, (int(width/2), int(height/2)))
     x_offset=int(width/2-25)
     y_offset=int(height/2)
     for c in range(0,3):
-        img[y_offset:y_offset+seriously.shape[0], x_offset:x_offset+seriously.shape[1], c] = seriously[:,:,c] * (seriously[:,:,3]/255.0) + img[y_offset:y_offset+seriously.shape[0], x_offset:x_offset+seriously.shape[1], c] * (1.0 - seriously[:,:,3]/255.0)
+        img[y_offset:y_offset+memeImg.shape[0], x_offset:x_offset+memeImg.shape[1], c] = memeImg[:,:,c] * (memeImg[:,:,3]/255.0) + img[y_offset:y_offset+memeImg.shape[0], x_offset:x_offset+memeImg.shape[1], c] * (1.0 - memeImg[:,:,3]/255.0)
     cv2.imwrite(filename,img)
 
 def checkForImage(searchResults, i, hashtag):
