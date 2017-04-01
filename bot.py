@@ -129,7 +129,7 @@ def findNewTrendingTweet():
     checkForImage(searchResults, 0, hashtag)
         
 def pickHashtag(trends):
-    noGlassesForYou = re.compile('xa|x.a.|xrisi|avgi|xrysi|xrisi|χα|χρυση|χρυσή|αυγη|αυγή|αβγη|χροισι|χ.α.', re.IGNORECASE) 
+    noGlassesForYou = re.compile('xa|x.a.|xrisi|avgi|xrysi|xrisi|\u03c7\u03b1|\u03c7\u03c1\u03c5\u03c3\u03b7|\u03c7\u03c1\u03c5\u03c3\u03ae|\u03b1\u03c5\u03b3|\u03b1\u03b2\u03b3|\u03c7\u002e\u03b1\u002e', re.IGNORECASE)
     randomInt = random.randint(1, len (trends[0]['trends'])-1)
     name = trends[0]['trends'][randomInt]['name']
     if noGlassesForYou.search(name):
