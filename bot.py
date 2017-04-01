@@ -116,7 +116,7 @@ def checkForImage(searchResults, i, hashtag):
         else:
             checkForImage(searchResults, i+1, hashtag)
     else:
-        api.retweet(searchResults[i-1].id_str)
+        findNewTrendingTweet()
 
 def findNewTrendingTweet():
     if random.randint(1, 3)==1:
