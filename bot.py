@@ -122,7 +122,7 @@ def findNewTrendingTweet():
         trends = api.trends_place(1) #globalTrends
     else:
         trends = api.trends_place(23424833) #greeceTrends
-    randomInt = random.randint(1, 7)
+    randomInt = random.randint(1, len (trends[0]['trends'])-1)
     query = trends[0]['trends'][randomInt]['query']
     hashtag = trends[0]['trends'][randomInt]['name']
     searchResults = api.search(q=query, count=20, result_type='mixed', include_entities=True)
