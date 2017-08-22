@@ -9,6 +9,8 @@ from PIL import ImageFile
 from PIL import ImageFont
 from PIL import ImageDraw
 
+from moviepy.editor import ImageSequenceClip
+
 import numpy as np
 import cv2
 
@@ -36,13 +38,23 @@ def tweet_image(url, text, hashtag):
         result = detectFace(filename)
         if result==1:
             text = random.choice(list(open('yesQuotes.txt'))).rstrip() + " #oleztThugBot SearchQuery: "+ hashtag
+            if random.randint(0, 2) != 0:
+                createGif(filename)
+                imageToTweet = 'images/editedImage.gif'
+            else:
+                imageToTweet = 'images/editedImage.png'
         else:
             scramble(filename)
             addMeme('images/editedImage.png', 'images/'+str(random.randint(0, 5))+'.png')
             text = random.choice(list(open('noQuotes.txt'))).rstrip() + " #oleztThugBot SearchQuery: " + hashtag
-        api.update_with_media('images/editedImage.png', status=text)
+            imageToTweet = 'images/editedImage.png'
+        api.update_with_media(imageToTweet, status=text)
     else:
         findNewTrendingTweet()
+
+def createGif(filename):
+    clip = ImageSequenceClip([filename, 'images/editedImage.png'], fps=1350)
+    clip.write_gif('images/editedImage.gif')
 
 def detectFace(filename):
     img = cv2.imread(filename, cv2.IMREAD_UNCHANGED)
