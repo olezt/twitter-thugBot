@@ -4,6 +4,10 @@ from io import BytesIO
 import requests
 import tweepy
 
+#this import/download is needed to prevent heroku app crash
+import imageio
+imageio.plugins.ffmpeg.download()
+
 from PIL import Image
 from PIL import ImageFile
 from PIL import ImageFont

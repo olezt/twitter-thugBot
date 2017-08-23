@@ -5,3 +5,4 @@ opencv-python==3.2.0.6
 APScheduler==3.3.1
 Pillow==4.0.0
 moviepy==0.2.3.2
+imageio==2.1.2
