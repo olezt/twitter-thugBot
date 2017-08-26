@@ -14,7 +14,8 @@ class MyStreamListener(tweepy.StreamListener):
 
     def on_status(self, status):
         userTweetedId = status.user.id_str
-        if userTweetedId!=THUG_BOT_ID:
+        inReplyToUserId = status.in_reply_to_user_id_str
+        if userTweetedId!=THUG_BOT_ID and inReplyToUserId==None:
             mentions = status.entities.get('user_mentions')
             for mention in mentions:
                 if mention.get('id_str')==THUG_BOT_ID:
