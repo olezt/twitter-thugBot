@@ -34,6 +34,7 @@ face_cascade_alt = cv2.CascadeClassifier('haarcascades/haarcascade_frontalface_a
 face_cascade_profile = cv2.CascadeClassifier('haarcascades/haarcascade_profileface.xml')
 
 def tweet_image(url, text, hashtag):
+    """Tweet given url image"""
     filename = 'images/temp.jpg'
     request = requests.get(url, stream=True)
     if request.status_code == 200:
@@ -57,10 +58,12 @@ def tweet_image(url, text, hashtag):
         findNewTrendingTweet()
 
 def createGif(filename):
+    """Create a gif using initial and edited images"""
     clip = ImageSequenceClip([filename, 'images/editedImage.png'], fps=1350)
     clip.write_gif('images/editedImage.gif')
 
 def removeDuplicateFaces(facesStraight, facesProfile):
+    """Combine and remove duplicate detected faces"""
     duplicateFaces = []
     for (x1,y1,w1,h1) in facesStraight:
         for (x2,y2,w2,h2) in facesProfile:
@@ -72,6 +75,7 @@ def removeDuplicateFaces(facesStraight, facesProfile):
     return faces
 
 def detectFace(filename):
+    """Detect faces on given image"""
     img = cv2.imread(filename, cv2.IMREAD_UNCHANGED)
     glasses = cv2.imread('images/thugLifeGlasses.png', cv2.IMREAD_UNCHANGED)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -96,6 +100,7 @@ def detectFace(filename):
         return 0
 
 def scramble(filename):
+    """Scramble given image blocks"""
     BLOCKLEN = 80  # Adjust and be careful here.
 
     img = Image.open(filename)
@@ -125,6 +130,7 @@ def scramble(filename):
     cv2.imwrite('images/editedImage.png',img)
     
 def addMeme(filename, meme):
+    """Add a random meme since no face was detected"""
     img = cv2.imread(filename)
     height, width, channels = img.shape
     memeImg = cv2.imread(meme, cv2.IMREAD_UNCHANGED)
@@ -136,6 +142,7 @@ def addMeme(filename, meme):
     cv2.imwrite(filename,img)
 
 def checkForImage(searchResults, i, hashtag):
+    """Check if tweet includes an image"""
     if i<len(searchResults):
         if 'media' in searchResults[i].entities:
             for image in searchResults[i].entities['media']:
@@ -146,6 +153,7 @@ def checkForImage(searchResults, i, hashtag):
         findNewTrendingTweet()
 
 def findNewTrendingTweet():
+    """Find a new trending tweet to use as image source"""
     if random.randint(1, 3)==1:
         trends = api.trends_place(1) #globalTrends
     else:
@@ -157,6 +165,7 @@ def findNewTrendingTweet():
     checkForImage(searchResults, 0, hashtag)
         
 def pickHashtag(trends):
+    """Pick a trending hashtag to use as source to search for tweets"""
     noGlassesForYou = re.compile('xa|x.a.|xrisi|avgi|xrysi|xrisi|\u03c7\u03b1|\u03c7\u03c1\u03c5\u03c3\u03b7|\u03c7\u03c1\u03c5\u03c3\u03ae|\u03b1\u03c5\u03b3|\u03b1\u03b2\u03b3|\u03c7\u002e\u03b1\u002e', re.IGNORECASE)
     randomInt = random.randint(1, len (trends[0]['trends'])-1)
     name = trends[0]['trends'][randomInt]['name']
@@ -167,6 +176,7 @@ def pickHashtag(trends):
         return randomInt;
 
 class thugBot():
-	findNewTrendingTweet()
-	
+    """Init bot by finding a trending tweet"""
+    findNewTrendingTweet()
+
 thugBot()
