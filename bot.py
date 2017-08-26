@@ -64,14 +64,20 @@ def createGif(filename):
 
 def removeDuplicateFaces(facesStraight, facesProfile):
     """Combine and remove duplicate detected faces"""
-    duplicateFaces = []
-    for (x1,y1,w1,h1) in facesStraight:
-        for (x2,y2,w2,h2) in facesProfile:
-            #weight and height produced are always equals
-            if (((x1+(w1/2)) - (x2+(w2/2))) ** 2 + ((y1+(w1/2)) - (y2+(w2/2))) ** 2) <= (w2/1.5) ** 2:
-                duplicateFaces.append([x2,y2,w2,h2])
-    faces = np.concatenate((facesStraight, facesProfile), axis=0)
-    faces = [x for x in faces if x not in np.array(duplicateFaces)]
+    faces = []
+    if len(facesStraight)>0 and len(facesProfile)>0:
+        duplicateFaces = []
+        for (x1,y1,w1,h1) in facesStraight:
+            for (x2,y2,w2,h2) in facesProfile:
+                #weight and height produced are always equals
+                if (((x1+(w1/2)) - (x2+(w2/2))) ** 2 + ((y1+(w1/2)) - (y2+(w2/2))) ** 2) <= (w2/1.5) ** 2:
+                    duplicateFaces.append([x2,y2,w2,h2])
+        faces = np.concatenate((facesStraight, facesProfile), axis=0)
+        faces = [x for x in faces if x not in np.array(duplicateFaces)]
+    elif len(facesStraight)>0:
+        faces = facesStraight
+    else:
+        faces = facesProfile
     return faces
 
 def detectFace(filename):
