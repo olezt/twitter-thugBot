@@ -60,7 +60,7 @@ def tweet_image(url, text, hashtag):
 def createGif(filename):
     """Create a gif using initial and edited images"""
     clip = ImageSequenceClip([filename, 'images/editedImage.png'], fps=1350)
-    clip.write_gif('images/editedImage.gif')
+    clip.speedx(0.5).write_gif('images/editedImage.gif')
 
 def removeDuplicateFaces(facesStraight, facesProfile):
     """Combine and remove duplicate detected faces"""
