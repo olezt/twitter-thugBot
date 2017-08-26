@@ -60,15 +60,26 @@ def createGif(filename):
     clip = ImageSequenceClip([filename, 'images/editedImage.png'], fps=1350)
     clip.write_gif('images/editedImage.gif')
 
+def removeDuplicateFaces(facesStraight, facesProfile):
+    duplicateFaces = []
+    for (x1,y1,w1,h1) in facesStraight:
+        for (x2,y2,w2,h2) in facesProfile:
+            #weight and height produced are always equals
+            if (((x1+(w1/2)) - (x2+(w2/2))) ** 2 + ((y1+(w1/2)) - (y2+(w2/2))) ** 2) <= (w2/1.5) ** 2:
+                duplicateFaces.append([x2,y2,w2,h2])
+    faces = np.concatenate((facesStraight, facesProfile), axis=0)
+    faces = [x for x in faces if x not in np.array(duplicateFaces)]
+    return faces
+
 def detectFace(filename):
     img = cv2.imread(filename, cv2.IMREAD_UNCHANGED)
     glasses = cv2.imread('images/thugLifeGlasses.png', cv2.IMREAD_UNCHANGED)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
-    if len(faces)<=0:
-        faces = face_cascade_alt.detectMultiScale(gray, 1.3, 5)
-    if len(faces)<=0:
-        faces = face_cascade_profile.detectMultiScale(gray, 1.3, 5)
+    facesStraight = np.array(face_cascade.detectMultiScale(gray, 1.3, 5))
+    if len(facesStraight)<=0:
+        facesStraight = np.array(face_cascade_alt.detectMultiScale(gray, 1.3, 5))
+    facesProfile = np.array(face_cascade_profile.detectMultiScale(gray, 1.3, 5))
+    faces = removeDuplicateFaces(facesStraight, facesProfile)
     if len(faces)>0:
         for (x,y,w,h) in faces:
             roi_gray = gray[y:y+h, x:x+w]
