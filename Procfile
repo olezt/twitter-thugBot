@@ -1,2 +1,2 @@
 clock: python clock.py
-worker: mentionListener.py
+worker: python mentionListener.py
