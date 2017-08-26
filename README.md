@@ -7,7 +7,14 @@ Find a trending tweet()
 If face exist:
   Add thugGlasses()
 else
-  Scramble()
+  Scramble and addMeme()  OR  addWastedMeme()
+```
+
+
+Also mention it on a tweet using @oleztThugBot:<br>
+```
+While listeningForMentions()
+	answerToMentions() using user's profile picture
 ```
 
 ### Printscreens
