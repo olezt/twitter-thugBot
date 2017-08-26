@@ -33,7 +33,7 @@ face_cascade = cv2.CascadeClassifier('haarcascades/haarcascade_frontalface_defau
 face_cascade_alt = cv2.CascadeClassifier('haarcascades/haarcascade_frontalface_alt.xml')
 face_cascade_profile = cv2.CascadeClassifier('haarcascades/haarcascade_profileface.xml')
 
-def tweet_image(url, text, hashtag, tweetToReplyId=None):
+def tweet_image(url, text, hashtag, tweetToReplyId=None, userToReplyName=None):
     """Tweet given url image"""
     filename = 'images/temp.jpg'
     request = requests.get(url, stream=True)
@@ -60,7 +60,7 @@ def tweet_image(url, text, hashtag, tweetToReplyId=None):
             api.update_with_media(imageToTweet, status=text)
         else:
             quoteFile = 'yesAnswerQuotes.txt' if result==1 else 'noAnswerQuotes.txt'
-            text = random.choice(list(open(quoteFile))).rstrip() + " #oleztThugBot"
+            text = "@"+userToReplyName + " " + random.choice(list(open(quoteFile))).rstrip() + " #oleztThugBot"
             api.update_with_media(imageToTweet, status=text, in_reply_to_status_id = tweetToReplyId)
     else:
         print ('Error trying to get the image')
@@ -68,8 +68,9 @@ def tweet_image(url, text, hashtag, tweetToReplyId=None):
 def answerTweet(status):
     """Answer to a tweet using user's profile image"""
     profileImageUrl = status.user.profile_image_url_https.replace('_normal', '')
-    tweetToReplyId = status.id
-    tweet_image(profileImageUrl, None, None, tweetToReplyId)
+    tweetToReplyId = status.id_str
+    userToReplyName = status.user.screen_name
+    tweet_image(profileImageUrl, None, None, tweetToReplyId, userToReplyName)
 
 def createGif(filename):
     """Create a gif using initial and edited images"""
