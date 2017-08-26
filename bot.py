@@ -56,7 +56,7 @@ def tweet_image(url, text, hashtag):
                 addWastedMeme(filename)
             text = random.choice(list(open('noQuotes.txt'))).rstrip() + " #oleztThugBot SearchQuery: " + hashtag
             imageToTweet = 'images/editedImage.png'
-        #api.update_with_media(imageToTweet, status=text)
+        api.update_with_media(imageToTweet, status=text)
     else:
         findNewTrendingTweet()
 
