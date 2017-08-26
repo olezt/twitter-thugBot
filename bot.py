@@ -49,11 +49,14 @@ def tweet_image(url, text, hashtag):
             else:
                 imageToTweet = 'images/editedImage.png'
         else:
-            scramble(filename)
-            addMeme('images/editedImage.png', 'images/'+str(random.randint(0, 5))+'.png')
+            if random.randint(0, 1) != 0:
+                scramble(filename)
+                addMeme('images/editedImage.png', 'images/'+str(random.randint(0, 5))+'.png', False)
+            else:
+                addWastedMeme(filename)
             text = random.choice(list(open('noQuotes.txt'))).rstrip() + " #oleztThugBot SearchQuery: " + hashtag
             imageToTweet = 'images/editedImage.png'
-        api.update_with_media(imageToTweet, status=text)
+        #api.update_with_media(imageToTweet, status=text)
     else:
         findNewTrendingTweet()
 
@@ -105,6 +108,13 @@ def detectFace(filename):
         cv2.imwrite('images/editedImage.png',img)
         return 0
 
+def addWastedMeme(filename):
+    """Set image GRAY and add wasted meme"""
+    img = cv2.imread(filename)
+    gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+    cv2.imwrite('images/editedImage.png',gray)
+    addMeme('images/editedImage.png', 'images/wasted.png', True)
+    
 def scramble(filename):
     """Scramble given image blocks"""
     BLOCKLEN = 80  # Adjust and be careful here.
@@ -135,14 +145,16 @@ def scramble(filename):
     img = img[y:y+h,x:x+w]
     cv2.imwrite('images/editedImage.png',img)
     
-def addMeme(filename, meme):
+def addMeme(filename, meme, placeCenter):
     """Add a random meme since no face was detected"""
     img = cv2.imread(filename)
     height, width, channels = img.shape
     memeImg = cv2.imread(meme, cv2.IMREAD_UNCHANGED)
     memeImg = cv2.resize(memeImg, (int(width/2), int(height/2)))
-    x_offset=int(width/2-25)
-    y_offset=int(height/2)
+    diffx = width/4 if placeCenter else 25
+    diffy = width/4 if placeCenter else 0
+    x_offset=int(width/2-(diffx))
+    y_offset=int(height/2-(diffy))
     for c in range(0,3):
         img[y_offset:y_offset+memeImg.shape[0], x_offset:x_offset+memeImg.shape[1], c] = memeImg[:,:,c] * (memeImg[:,:,3]/255.0) + img[y_offset:y_offset+memeImg.shape[0], x_offset:x_offset+memeImg.shape[1], c] * (1.0 - memeImg[:,:,3]/255.0)
     cv2.imwrite(filename,img)
