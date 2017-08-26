@@ -33,7 +33,7 @@ face_cascade = cv2.CascadeClassifier('haarcascades/haarcascade_frontalface_defau
 face_cascade_alt = cv2.CascadeClassifier('haarcascades/haarcascade_frontalface_alt.xml')
 face_cascade_profile = cv2.CascadeClassifier('haarcascades/haarcascade_profileface.xml')
 
-def tweet_image(url, text, hashtag):
+def tweet_image(url, text, hashtag, tweetToReplyId=None):
     """Tweet given url image"""
     filename = 'images/temp.jpg'
     request = requests.get(url, stream=True)
@@ -42,7 +42,6 @@ def tweet_image(url, text, hashtag):
         i.save(filename)
         result = detectFace(filename)
         if result==1:
-            text = random.choice(list(open('yesQuotes.txt'))).rstrip() + " #oleztThugBot SearchQuery: "+ hashtag
             if random.randint(0, 2) != 0:
                 createGif(filename)
                 imageToTweet = 'images/editedImage.gif'
@@ -54,11 +53,23 @@ def tweet_image(url, text, hashtag):
                 addMeme('images/editedImage.png', 'images/'+str(random.randint(0, 5))+'.png', False)
             else:
                 addWastedMeme(filename)
-            text = random.choice(list(open('noQuotes.txt'))).rstrip() + " #oleztThugBot SearchQuery: " + hashtag
             imageToTweet = 'images/editedImage.png'
-        api.update_with_media(imageToTweet, status=text)
+        if tweetToReplyId==None:
+            quoteFile = 'yesQuotes.txt' if result==1 else 'noQuotes.txt'
+            text = random.choice(list(open(quoteFile))).rstrip() + " #oleztThugBot SearchQuery: "+ hashtag
+            api.update_with_media(imageToTweet, status=text)
+        else:
+            quoteFile = 'yesAnswerQuotes.txt' if result==1 else 'noAnswerQuotes.txt'
+            text = random.choice(list(open(quoteFile))).rstrip() + " #oleztThugBot"
+            api.update_with_media(imageToTweet, status=text, in_reply_to_status_id = tweetToReplyId)
     else:
-        findNewTrendingTweet()
+        print ('Error trying to get the image')
+
+def answerTweet(status):
+    """Answer to a tweet using user's profile image"""
+    profileImageUrl = status.user.profile_image_url_https.replace('_normal', '')
+    tweetToReplyId = status.id
+    tweet_image(profileImageUrl, None, None, tweetToReplyId)
 
 def createGif(filename):
     """Create a gif using initial and edited images"""
@@ -193,8 +204,6 @@ def pickHashtag(trends):
     else:
         return randomInt;
 
-class thugBot():
+if __name__ == "__main__":
     """Init bot by finding a trending tweet"""
     findNewTrendingTweet()
-
-thugBot()
