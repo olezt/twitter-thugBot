@@ -11,10 +11,11 @@ else
 ```
 
 
-Also mention it on a tweet using @oleztThugBot:<br>
+Also mention @oleztThugBot on a tweet and see what happens...<br>
+**Spoiler alert**
 ```
 While listeningForMentions()
-	answerToMentions() using user's profile picture
+  answerToMentions() using user's profile picture
 ```
 
 ### Printscreens
