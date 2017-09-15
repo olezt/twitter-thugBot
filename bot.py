@@ -1,5 +1,6 @@
 import random
 from io import BytesIO
+import os
 
 import requests
 import tweepy
@@ -45,6 +46,8 @@ def tweet_image(url, text, hashtag, tweetToReplyId=None, userToReplyName=None):
             if random.randint(0, 2) != 0:
                 createGif(filename)
                 imageToTweet = 'images/editedImage.gif'
+                if os.stat(imageToTweet).st_size/1024>3000:
+                    imageToTweet = 'images/editedImage.png'
             else:
                 imageToTweet = 'images/editedImage.png'
         else:
