@@ -11,7 +11,7 @@ else
 ```
 
 
-Also mention @oleztThugBot on a tweet and see what happens...<br>
+Also mention @oleztThugBot on a tweet and see what happens... (Currently disabled on Heroku)<br>
 **Spoiler alert**
 ```
 While listeningForMentions()
