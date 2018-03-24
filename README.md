@@ -1,6 +1,6 @@
 # oleztThugBot
 
-Born Wednesday, March 29, 2016.<br>
+Born Wednesday, March 29, 2017.<br>
 Enjoy its tweets: https://twitter.com/oleztThugBot
 ```
 Find a trending tweet()
